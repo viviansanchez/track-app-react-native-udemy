@@ -7,6 +7,8 @@ const authReducer = (state, action) => {
   switch (action.type) {
     case "signin":
       return { errorMessage: "", token: action.payload };
+    case "signout":
+      return { token: null, errorMessage: "" };
     case "add_error":
       return { ...state, errorMessage: action.payload };
     case "clear_error_message":
@@ -60,10 +62,10 @@ const tryLocalSignin = (dispatch) => async () => {
   }
 };
 
-const signout = (dispatch) => {
-  return () => {
-    //somehow sign out
-  };
+const signout = (dispatch) => async () => {
+  await AsyncStorage.removeItem("token");
+  dispatch({ type: "signout" });
+  navigate("loginFlow");
 };
 
 const clearErrorMessage = (dispatch) => () => {
